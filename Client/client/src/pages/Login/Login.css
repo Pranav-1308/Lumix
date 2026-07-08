@@ -1,0 +1,167 @@
+.login-page{
+    width:100%;
+    min-height:100vh;
+    display:flex;
+}
+
+/* Left Side */
+
+.left-side{
+    flex:1;
+    background:linear-gradient(135deg,#5b4bff,#7d4dff);
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:60px;
+}
+
+.brand{
+    max-width:450px;
+}
+
+.brand h1{
+    font-size:55px;
+    margin-bottom:20px;
+}
+
+.brand h2{
+    font-size:34px;
+    margin-bottom:20px;
+}
+
+.brand p{
+    line-height:1.8;
+    margin-bottom:30px;
+    opacity:.95;
+}
+
+.brand ul{
+    list-style:none;
+}
+
+.brand li{
+    margin:18px 0;
+    font-size:18px;
+}
+
+/* Right Side */
+
+.right-side{
+    flex:1;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#f5f7fb;
+    padding:40px;
+}
+
+.login-card{
+    width:100%;
+    max-width:430px;
+    background:white;
+    padding:40px;
+    border-radius:20px;
+    box-shadow:0 15px 35px rgba(0,0,0,.08);
+}
+
+.login-card h2{
+    font-size:30px;
+    color:#1f2937;
+}
+
+.login-card > p{
+    color:#6b7280;
+    margin:10px 0 30px;
+}
+
+/* Input */
+
+.input-box{
+    width:100%;
+    display:flex;
+    align-items:center;
+    border:1px solid #d1d5db;
+    border-radius:12px;
+    padding:0 15px;
+    margin-bottom:25px;
+    transition:.3s;
+}
+
+.input-box:focus-within{
+    border-color:#6c63ff;
+    box-shadow:0 0 0 4px rgba(108,99,255,.15);
+}
+
+.input-box svg{
+    color:#6b7280;
+}
+
+.input-box input{
+    width:100%;
+    border:none;
+    outline:none;
+    padding:15px;
+    font-size:15px;
+    background:none;
+}
+
+/* Button */
+
+button{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:12px;
+    background:#6c63ff;
+    color:white;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.3s;
+}
+
+button:hover{
+    background:#5948ff;
+    transform:translateY(-2px);
+}
+
+/* Bottom Text */
+
+.bottom-text{
+    text-align:center;
+    margin-top:25px;
+    color:#6b7280;
+}
+
+.bottom-text a{
+    margin-left:8px;
+    color:#6c63ff;
+    font-weight:600;
+}
+
+.bottom-text a:hover{
+    text-decoration:underline;
+}
+
+/* Responsive */
+
+@media(max-width:900px){
+
+.login-page{
+    flex-direction:column;
+}
+
+.left-side{
+    display:none;
+}
+
+.right-side{
+    padding:20px;
+}
+
+.login-card{
+    padding:30px;
+}
+
+}
