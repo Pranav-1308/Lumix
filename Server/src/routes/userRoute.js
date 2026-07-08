@@ -4,7 +4,7 @@ import express from "express";
 import {
     getUserProfile,
     updateUserProfile,
-} from "../controllers/userController.js";
+} from "../controller/userController.js";
 
 const router = express.Router();
 
