@@ -26,9 +26,11 @@ const getUserProfile = asyncHandler(async (req, res) => {
 // UPDATE USER PROFILE
 const updateUserProfile = asyncHandler(async (req, res) => {
     const { userId } = req.params;
-    const { name, avatar } = req.body;
+    const { name } = req.body;
 
-    if (!name && avatar === undefined) {
+    const avatarLocalPath = req.file?.path;
+
+    if (!name && !avatarLocalPath) {
         throw new ApiError(
             400,
             "Name or avatar is required"
@@ -41,8 +43,19 @@ const updateUserProfile = asyncHandler(async (req, res) => {
         updateData.name = name.trim();
     }
 
-    if (avatar !== undefined) {
-        updateData.avatar = avatar;
+    if (avatarLocalPath) {
+        const avatar = await uploadOnCloudinary(
+            avatarLocalPath
+        );
+
+        if (!avatar) {
+            throw new ApiError(
+                500,
+                "Avatar upload failed"
+            );
+        }
+
+        updateData.avatar = avatar.secure_url;
     }
 
     const updatedUser = await User.findByIdAndUpdate(
@@ -57,7 +70,10 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     );
 
     if (!updatedUser) {
-        throw new ApiError(404, "User not found");
+        throw new ApiError(
+            404,
+            "User not found"
+        );
     }
 
     return res.status(200).json({
@@ -65,6 +81,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
         message: "Profile updated successfully",
         data: updatedUser,
     });
+
 });
 
 export {
