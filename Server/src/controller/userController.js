@@ -6,9 +6,9 @@ import {
     uploadOnCloudinary,
 } from "../utils/cloudinary.js";
 
-// ===============================
+
 // GENERATE ACCESS TOKEN
-// ===============================
+
 const generateAccessToken = (user) => {
     return jwt.sign(
         {
@@ -24,9 +24,9 @@ const generateAccessToken = (user) => {
     );
 };
 
-// ===============================
+
 // REGISTER USER
-// ===============================
+
 const registerUser = asyncHandler(async (req, res) => {
 
     const {
@@ -36,9 +36,9 @@ const registerUser = asyncHandler(async (req, res) => {
 
     const avatarLocalPath = req.file?.path;
 
-    // ===============================
+    
     // VALIDATION
-    // ===============================
+    
     if (!name || !registrationToken) {
         throw new ApiError(
             400,
@@ -53,9 +53,9 @@ const registerUser = asyncHandler(async (req, res) => {
         );
     }
 
-    // ===============================
+  
     // VERIFY REGISTRATION TOKEN
-    // ===============================
+
     let decodedToken;
 
     try {
@@ -70,9 +70,9 @@ const registerUser = asyncHandler(async (req, res) => {
         );
     }
 
-    // ===============================
+
     // CHECK TOKEN PURPOSE
-    // ===============================
+   
     if (decodedToken.purpose !== "register") {
         throw new ApiError(
             401,
@@ -80,14 +80,12 @@ const registerUser = asyncHandler(async (req, res) => {
         );
     }
 
-    // ===============================
     // GET VERIFIED PHONE
-    // ===============================
+    
     const phoneNumber = decodedToken.phone;
 
-    // ===============================
     // CHECK DUPLICATE USER
-    // ===============================
+  
     const existingUser = await User.findOne({
         phone: phoneNumber,
     });
@@ -99,9 +97,9 @@ const registerUser = asyncHandler(async (req, res) => {
         );
     }
 
-    // ===============================
+    
     // UPLOAD AVATAR
-    // ===============================
+ 
     const avatar = await uploadOnCloudinary(
         avatarLocalPath
     );
@@ -113,18 +111,18 @@ const registerUser = asyncHandler(async (req, res) => {
         );
     }
 
-    // ===============================
+    
     // CREATE USER
-    // ===============================
+  
     const user = await User.create({
         name: name.trim(),
         phone: phoneNumber,
         avatar: avatar.secure_url,
     });
 
-    // ===============================
+    
     // GENERATE ACCESS TOKEN
-    // ===============================
+    
     const accessToken = jwt.sign(
         {
             userId: user._id,
@@ -137,9 +135,9 @@ const registerUser = asyncHandler(async (req, res) => {
         }
     );
 
-    // ===============================
+   
     // RESPONSE
-    // ===============================
+    
     return res.status(201).json({
         success: true,
         message: "User registered successfully",
@@ -152,9 +150,9 @@ const registerUser = asyncHandler(async (req, res) => {
 });
 
 
-// ===============================
+
 // GET USER PROFILE
-// ===============================
+
 const getUserProfile = asyncHandler(
     async (req, res) => {
         const user =
@@ -179,9 +177,9 @@ const getUserProfile = asyncHandler(
 );
 
 
-// ===============================
+
 // UPDATE USER PROFILE
-// ===============================
+
 const updateUserProfile = asyncHandler(
     async (req, res) => {
         const { name } = req.body;
@@ -249,7 +247,7 @@ const updateUserProfile = asyncHandler(
 
 
 export {
-    registerUser,
     getUserProfile,
-    updateUserProfile,
+    registerUser,
+    updateUserProfile
 };

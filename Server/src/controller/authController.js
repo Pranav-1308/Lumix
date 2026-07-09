@@ -9,9 +9,9 @@ import { asyncHandler } from "../utils/asynchandler.js";
 import sendSms from "../services/smsService.js";
 
 
-// ===============================
+
 // GENERATE ACCESS TOKEN
-// ===============================
+
 const generateAccessToken = (user) => {
   return jwt.sign(
     {
@@ -26,9 +26,9 @@ const generateAccessToken = (user) => {
     }
   );
 };
-// ===============================
+
 // SEND OTP
-// ===============================
+
 const sendOtp = asyncHandler(async (req, res) => {
   const { phone } = req.body;
 
@@ -82,9 +82,9 @@ const sendOtp = asyncHandler(async (req, res) => {
 });
 
 
-// ===============================
+
 // VERIFY OTP
-// ===============================
+
 const verifyOtp = asyncHandler(async (req, res) => {
   const { phone, otp } = req.body;
 
@@ -152,9 +152,9 @@ const verifyOtp = asyncHandler(async (req, res) => {
     _id: otpRecord._id,
   });
 
-  // ===============================
+ 
   // LOGIN USER
-  // ===============================
+ 
   if (purpose === "login") {
     const user = await User.findOne({
       phone: phoneNumber,
@@ -181,9 +181,9 @@ const verifyOtp = asyncHandler(async (req, res) => {
     });
   }
 
-  // ===============================
+  
   // NEW USER REGISTRATION TOKEN
-  // ===============================
+
   const registrationToken = jwt.sign(
     {
       phone: phoneNumber,

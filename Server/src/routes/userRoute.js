@@ -1,26 +1,16 @@
 import express from "express";
 
-import {
-    registerUser,
-    getUserProfile,
-    updateUserProfile,
+import { registerUser, getUserProfile, updateUserProfile,
 } from "../controller/userController.js";
 
-import {
-    upload,
-} from "../middlewares/multer.middleware.js";
+import { upload,} from "../middleware/multer.middleware.js";
 
-import {
-    verifyJWT,
-} from "../middlewares/auth.middleware.js";
+import { verifyJWT} from "../middleware/auth.middleware.js";
 
 
 const router = express.Router();
 
 
-// ===============================
-// REGISTER USER
-// ===============================
 router.post(
     "/register",
     upload.single("avatar"),
@@ -28,9 +18,6 @@ router.post(
 );
 
 
-// ===============================
-// GET LOGGED-IN USER PROFILE
-// ===============================
 router.get(
     "/profile",
     verifyJWT,
@@ -38,11 +25,8 @@ router.get(
 );
 
 
-// ===============================
-// UPDATE LOGGED-IN USER PROFILE
-// ===============================
 router.patch(
-    "/profile",
+    "/updateProfile",
     verifyJWT,
     upload.single("avatar"),
     updateUserProfile
