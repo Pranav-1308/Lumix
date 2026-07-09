@@ -9,6 +9,12 @@ import { upload } from "../middlewares/multer.middleware.js";
 
 const router = express.Router();
 
+router.post(
+    "/register",
+    upload.single("avatar"),
+    registerUser
+);
+
 router.get("/:userId", getUserProfile);
 
 router.patch(

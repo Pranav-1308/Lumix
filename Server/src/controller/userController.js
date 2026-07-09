@@ -1,52 +1,55 @@
-// src/controllers/userController.js
-
 import { User } from "../models/usermodel.js";
 import { ApiError } from "../utils/ApiError.js";
 import { asyncHandler } from "../utils/asynchandler.js";
+import {
+    uploadOnCloudinary,
+} from "../utils/cloudinary.js";
 
 
-// GET USER PROFILE
-const getUserProfile = asyncHandler(async (req, res) => {
-    const { userId } = req.params;
+// ===============================
+// REGISTER USER
+// ===============================
+const registerUser = asyncHandler(
+    async (req, res) => {
+        const { name, phone } = req.body;
 
-    const user = await User.findById(userId);
+        const avatarLocalPath =
+            req.file?.path;
 
-    if (!user) {
-        throw new ApiError(404, "User not found");
-    }
+        if (!name || !phone) {
+            throw new ApiError(
+                400,
+                "Name and phone are required"
+            );
+        }
 
-    return res.status(200).json({
-        success: true,
-        message: "User fetched successfully",
-        data: user,
-    });
-});
+        if (!avatarLocalPath) {
+            throw new ApiError(
+                400,
+                "Avatar is required"
+            );
+        }
 
+        const phoneNumber = phone.trim();
 
-// UPDATE USER PROFILE
-const updateUserProfile = asyncHandler(async (req, res) => {
-    const { userId } = req.params;
-    const { name } = req.body;
+        // Check duplicate
+        const existingUser =
+            await User.findOne({
+                phone: phoneNumber,
+            });
 
-    const avatarLocalPath = req.file?.path;
+        if (existingUser) {
+            throw new ApiError(
+                409,
+                "User already exists"
+            );
+        }
 
-    if (!name && !avatarLocalPath) {
-        throw new ApiError(
-            400,
-            "Name or avatar is required"
-        );
-    }
-
-    const updateData = {};
-
-    if (name) {
-        updateData.name = name.trim();
-    }
-
-    if (avatarLocalPath) {
-        const avatar = await uploadOnCloudinary(
-            avatarLocalPath
-        );
+        // Upload avatar
+        const avatar =
+            await uploadOnCloudinary(
+                avatarLocalPath
+            );
 
         if (!avatar) {
             throw new ApiError(
@@ -55,36 +58,122 @@ const updateUserProfile = asyncHandler(async (req, res) => {
             );
         }
 
-        updateData.avatar = avatar.secure_url;
-    }
+        // Create complete user
+        const user = await User.create({
+            name: name.trim(),
+            phone: phoneNumber,
+            avatar: avatar.secure_url,
+        });
 
-    const updatedUser = await User.findByIdAndUpdate(
-        userId,
-        {
-            $set: updateData,
-        },
-        {
-            new: true,
-            runValidators: true,
+        return res.status(201).json({
+            success: true,
+            message:
+                "User registered successfully",
+            data: user,
+        });
+    }
+);
+
+
+// ===============================
+// GET USER PROFILE
+// ===============================
+const getUserProfile = asyncHandler(
+    async (req, res) => {
+        const { userId } = req.params;
+
+        const user =
+            await User.findById(userId);
+
+        if (!user) {
+            throw new ApiError(
+                404,
+                "User not found"
+            );
         }
-    );
 
-    if (!updatedUser) {
-        throw new ApiError(
-            404,
-            "User not found"
-        );
+        return res.status(200).json({
+            success: true,
+            message:
+                "User fetched successfully",
+            data: user,
+        });
     }
+);
 
-    return res.status(200).json({
-        success: true,
-        message: "Profile updated successfully",
-        data: updatedUser,
-    });
 
-});
+// ===============================
+// UPDATE USER PROFILE
+// ===============================
+const updateUserProfile = asyncHandler(
+    async (req, res) => {
+        const { userId } = req.params;
+        const { name } = req.body;
+
+        const avatarLocalPath =
+            req.file?.path;
+
+        if (!name && !avatarLocalPath) {
+            throw new ApiError(
+                400,
+                "Name or avatar is required"
+            );
+        }
+
+        const updateData = {};
+
+        if (name) {
+            updateData.name = name.trim();
+        }
+
+        if (avatarLocalPath) {
+            const avatar =
+                await uploadOnCloudinary(
+                    avatarLocalPath
+                );
+
+            if (!avatar) {
+                throw new ApiError(
+                    500,
+                    "Avatar upload failed"
+                );
+            }
+
+            updateData.avatar =
+                avatar.secure_url;
+        }
+
+        const updatedUser =
+            await User.findByIdAndUpdate(
+                userId,
+                {
+                    $set: updateData,
+                },
+                {
+                    new: true,
+                    runValidators: true,
+                }
+            );
+
+        if (!updatedUser) {
+            throw new ApiError(
+                404,
+                "User not found"
+            );
+        }
+
+        return res.status(200).json({
+            success: true,
+            message:
+                "Profile updated successfully",
+            data: updatedUser,
+        });
+    }
+);
+
 
 export {
+    registerUser,
     getUserProfile,
     updateUserProfile,
 };
