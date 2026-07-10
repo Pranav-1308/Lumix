@@ -1,12 +1,12 @@
-import crypto from "crypto";
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
 import jwt from "jsonwebtoken";
 
-import { User } from "../models/usermodel.js";
 import { Otp } from "../models/otpmodel.js";
+import { User } from "../models/usermodel.js";
+import sendSms from "../services/smsService.js";
 import { ApiError } from "../utils/ApiError.js";
 import { asyncHandler } from "../utils/asynchandler.js";
-import sendSms from "../services/smsService.js";
 
 
 
@@ -72,7 +72,14 @@ const sendOtp = asyncHandler(async (req, res) => {
     ),
   });
 
-  await sendSms(phoneNumber, otp);
+ const formattedPhone = phoneNumber.startsWith("+")
+  ? phoneNumber
+  : `+91${phoneNumber}`;
+
+  console.log("Original phone:", phoneNumber);
+console.log("Sending OTP to:", formattedPhone);
+
+await sendSms(formattedPhone, otp);
 
   return res.status(200).json({
     success: true,
@@ -211,6 +218,6 @@ const verifyOtp = asyncHandler(async (req, res) => {
 });
 
 export {
-  sendOtp,
-  verifyOtp,
+    sendOtp,
+    verifyOtp
 };

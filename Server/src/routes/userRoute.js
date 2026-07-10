@@ -1,6 +1,6 @@
 import express from "express";
 
-import { registerUser, getUserProfile, updateUserProfile,
+import { registerUser, getUserProfile, updateUserProfile, searchUsers,
 } from "../controller/userController.js";
 
 import { upload,} from "../middleware/multer.middleware.js";

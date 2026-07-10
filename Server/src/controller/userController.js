@@ -123,17 +123,7 @@ const registerUser = asyncHandler(async (req, res) => {
     
     // GENERATE ACCESS TOKEN
     
-    const accessToken = jwt.sign(
-        {
-            userId: user._id,
-            phone: user.phone,
-        },
-        process.env.ACCESS_TOKEN_SECRET,
-        {
-            expiresIn:
-                process.env.ACCESS_TOKEN_EXPIRY || "7d",
-        }
-    );
+    const accessToken = generateAccessToken(user);
 
    
     // RESPONSE
@@ -147,6 +137,47 @@ const registerUser = asyncHandler(async (req, res) => {
         },
     });
 
+});
+
+
+ const searchUsers = asyncHandler(async (req, res) => {
+    const query = req.query.query?.trim();
+
+    if (!query) {
+        throw new ApiError(
+            400,
+            "Search query is required"
+        );
+    }
+
+    const users = await User.find({
+        _id: {
+            $ne: req.user._id,
+        },
+
+        $or: [
+            {
+                name: {
+                    $regex: query,
+                    $options: "i",
+                },
+            },
+            {
+                phone: {
+                    $regex: query,
+                    $options: "i",
+                },
+            },
+        ],
+    })
+        .select("name phone avatar")
+        .limit(20);
+
+    return res.status(200).json({
+        success: true,
+        message: "Users fetched successfully",
+        data: users,
+    });
 });
 
 
@@ -242,12 +273,15 @@ const updateUserProfile = asyncHandler(
                 "Profile updated successfully",
             data: updatedUser,
         });
-    }
+    },
+
+   
 );
 
 
 export {
     getUserProfile,
     registerUser,
-    updateUserProfile
+    updateUserProfile,
+    searchUsers,
 };
