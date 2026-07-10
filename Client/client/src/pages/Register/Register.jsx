@@ -1,69 +1,100 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaCamera, FaUser, FaPhoneAlt } from "react-icons/fa";
+import { useUser } from "../../context/UserContext";
 import "./Register.css";
 
 function Register() {
-  const [avatar, setAvatar] = useState(null);
+
+  const navigate = useNavigate();
+
+  // User Context
+  const { setUserData } = useUser();
+
+  // States
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [avatar, setAvatar] = useState(null);
+  const [preview, setPreview] = useState(null);
 
+  // Image Upload
   const handleImageChange = (e) => {
+
     const file = e.target.files[0];
 
     if (file) {
-      setAvatar(URL.createObjectURL(file));
+      setAvatar(file);
+      setPreview(URL.createObjectURL(file));
     }
+
   };
 
+  // Form Submit
   const handleSubmit = async (e) => {
+
     e.preventDefault();
 
-    const userData = {
+    // Save data in Context
+    setUserData({
       name,
       phone,
-    };
+      avatar,
+    });
 
     try {
+
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/v1/users/fullname`,
+        `${import.meta.env.VITE_API_URL}/api/v1/auth/send-otp`,
         {
           method: "POST",
+
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(userData),
+
+          body: JSON.stringify({
+            phone,
+          }),
         }
       );
 
-      console.log("Status Code:", response.status);
+      const text = await response.text();
 
-      if (!response.ok) {
-        const errorText = await response.text();
+      console.log("Backend Response:");
+      console.log(text);
 
-        console.log("Backend Error:");
-        console.log(errorText);
+      return;
 
-        alert(`Request Failed (${response.status})`);
-        return;
+      if (response.ok) {
+
+        alert("OTP Sent Successfully");
+
+        navigate("/otp");
+
+      } else {
+
+        alert(data.message || "Unable to Send OTP");
+
       }
 
-      const data = await response.json();
-
-      console.log("Success:", data);
-
-      alert("Registration Successful!");
-
     } catch (error) {
-      console.error("Network Error:", error);
-      alert("Unable to connect to the backend.");
+
+      console.log(error);
+
+      alert("Unable to connect to backend");
+
     }
+
   };
 
   return (
+
     <div className="register-page">
 
+      {/* Left Side */}
+
       <div className="left-side">
+
         <div className="brand">
 
           <h1>LUMIX</h1>
@@ -81,7 +112,10 @@ function Register() {
           </ul>
 
         </div>
+
       </div>
+
+      {/* Right Side */}
 
       <div className="right-side">
 
@@ -91,17 +125,23 @@ function Register() {
 
           <p>Welcome to LUMIX 👋</p>
 
+          {/* Avatar */}
+
           <div className="avatar-upload">
 
             <label htmlFor="avatar">
 
-              {avatar ? (
-                <img src={avatar} alt="Avatar" />
+              {preview ? (
+
+                <img src={preview} alt="Avatar" />
+
               ) : (
+
                 <>
                   <FaCamera className="camera-icon" />
                   <span>Upload Photo</span>
                 </>
+
               )}
 
             </label>
@@ -112,9 +152,12 @@ function Register() {
               hidden
               accept="image/*"
               onChange={handleImageChange}
+              required
             />
 
           </div>
+
+          {/* Name */}
 
           <div className="input-box">
 
@@ -129,6 +172,8 @@ function Register() {
             />
 
           </div>
+
+          {/* Phone */}
 
           <div className="input-box">
 
@@ -146,10 +191,11 @@ function Register() {
           </div>
 
           <button type="submit">
-            Create Account
+            Send OTP
           </button>
 
           <p className="bottom-text">
+
             Already have an account?
 
             <Link to="/login">
@@ -163,7 +209,9 @@ function Register() {
       </div>
 
     </div>
+
   );
+
 }
 
 export default Register;
