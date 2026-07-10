@@ -25,120 +25,60 @@ const generateAccessToken = (user) => {
 };
 
 
-// REGISTER USER
-
 const registerUser = asyncHandler(async (req, res) => {
+  console.log("FULL BODY:", req.body);
+  console.log("UPLOADED FILE:", req.file);
 
-    const {
-        name,
-        registrationToken,
-    } = req.body;
+  const { name, phone } = req.body;
 
-    const avatarLocalPath = req.file?.path;
+  console.log("Received name:", name);
+  console.log("Received phone:", phone);
 
-    
-    // VALIDATION
-    
-    if (!name || !registrationToken) {
-        throw new ApiError(
-            400,
-            "Name and registration token are required"
-        );
-    }
+  if (!name || !phone) {
+    throw new ApiError(400, "Name and phone number are required");
+  }
 
-    if (!avatarLocalPath) {
-        throw new ApiError(
-            400,
-            "Avatar is required"
-        );
-    }
+  const existingUser = await User.findOne({ phone });
 
-  
-    // VERIFY REGISTRATION TOKEN
+  if (existingUser) {
+    throw new ApiError(409, "User already exists");
+  }
 
-    let decodedToken;
+ let avatarUrl = "";
 
-    try {
-        decodedToken = jwt.verify(
-            registrationToken,
-            process.env.REGISTRATION_TOKEN_SECRET
-        );
-    } catch (error) {
-        throw new ApiError(
-            401,
-            "Invalid or expired registration token"
-        );
-    }
+if (req.file) {
+  console.log("Local avatar path:", req.file.path);
 
+  const avatar = await uploadOnCloudinary(req.file.path);
 
-    // CHECK TOKEN PURPOSE
-   
-    if (decodedToken.purpose !== "register") {
-        throw new ApiError(
-            401,
-            "Invalid registration token"
-        );
-    }
+  console.log("Cloudinary returned:", avatar);
 
-    // GET VERIFIED PHONE
-    
-    const phoneNumber = decodedToken.phone;
+  if (!avatar) {
+    throw new Error("Avatar upload to Cloudinary failed");
+  }
 
-    // CHECK DUPLICATE USER
-  
-    const existingUser = await User.findOne({
-        phone: phoneNumber,
-    });
+  const avatarUrl = avatar.secure_url;
 
-    if (existingUser) {
-        throw new ApiError(
-            409,
-            "User already exists"
-        );
-    }
+  console.log("Avatar URL:", avatarUrl);
+}
 
-    
-    // UPLOAD AVATAR
- 
-    const avatar = await uploadOnCloudinary(
-        avatarLocalPath
-    );
+  const user = await User.create({
+    name: name.trim(),
+    phone: phone.trim(),
+    avatar: avatarUrl,
+  });
 
-    if (!avatar?.secure_url) {
-        throw new ApiError(
-            500,
-            "Avatar upload failed"
-        );
-    }
+  console.log("Saved user:", user);
+  console.log("Saved name:", user.name);
+  console.log("Saved phone:", user.phone);
+  console.log("Saved avatar URL:", user.avatar);
 
-    
-    // CREATE USER
-  
-    const user = await User.create({
-        name: name.trim(),
-        phone: phoneNumber,
-        avatar: avatar.secure_url,
-    });
-
-    
-    // GENERATE ACCESS TOKEN
-    
-    const accessToken = generateAccessToken(user);
-
-   
-    // RESPONSE
-    
-    return res.status(201).json({
-        success: true,
-        message: "User registered successfully",
-        data: {
-            user,
-            accessToken,
-        },
-    });
-
+  return res.status(201).json({
+    success: true,
+    message: "User registered successfully",
+    user,
+  });
 });
-
 
  const searchUsers = asyncHandler(async (req, res) => {
     const query = req.query.query?.trim();
@@ -282,6 +222,6 @@ const updateUserProfile = asyncHandler(
 export {
     getUserProfile,
     registerUser,
-    updateUserProfile,
     searchUsers,
+    updateUserProfile
 };
