@@ -1,13 +1,24 @@
 import "./Home.css";
 
+
+
+// function Home() {
+//   return (
+//     <div>
+//       <h1>Welcome to LUMIX 🎉</h1>
+//     </div>
+//   );
+// }
+
+// export default Home;
 function Home() {
 
   // Dummy chat data
   const chats = [
     {
       id: 1,
-      name: "Rahul",
-      message: "Hey! Are you coming today?"
+      name: "Pranav",
+      message: "Hey! Parth, can you show your tattoo? 😄"
     },
     {
       id: 2,

@@ -43,47 +43,45 @@ function Register() {
 
     try {
 
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/v1/auth/send-otp`,
-        {
-          method: "POST",
-
-          headers: {
-            "Content-Type": "application/json",
-          },
-
-          body: JSON.stringify({
-            phone,
-          }),
-        }
-      );
-
-      const text = await response.text();
-
-      console.log("Backend Response:");
-      console.log(text);
-
-      return;
-
-      if (response.ok) {
-
-        alert("OTP Sent Successfully");
-
-        navigate("/otp");
-
-      } else {
-
-        alert(data.message || "Unable to Send OTP");
-
-      }
-
-    } catch (error) {
-
-      console.log(error);
-
-      alert("Unable to connect to backend");
-
+  const response = await fetch(
+    `${import.meta.env.VITE_API_URL}/api/v1/auth/send-otp`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        phone,
+      }),
     }
+  );
+
+  // Read JSON response
+  const data = await response.json();
+
+  console.log("Backend Response:", data);
+
+  if (response.ok) {
+
+    alert("OTP Sent Successfully");
+
+    console.log("Navigating to OTP...");
+
+    navigate("/otp");
+
+  } else {
+
+    alert(data.message || "Unable to Send OTP");
+
+  }
+
+} catch (error) {
+
+  console.log(error);
+
+  alert("Unable to connect backend");
+
+}
 
   };
 

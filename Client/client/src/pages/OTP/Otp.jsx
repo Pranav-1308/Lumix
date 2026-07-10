@@ -7,7 +7,7 @@ function OTP() {
 
   const navigate = useNavigate();
 
-  // Get user data from Context
+  // Get User Data from Context
   const { userData } = useUser();
 
   const [otp, setOtp] = useState("");
@@ -26,11 +26,9 @@ function OTP() {
         `${import.meta.env.VITE_API_URL}/api/v1/auth/verify-otp`,
         {
           method: "POST",
-
           headers: {
             "Content-Type": "application/json",
           },
-
           body: JSON.stringify({
             phone: userData.phone,
             otp: otp,
@@ -38,7 +36,19 @@ function OTP() {
         }
       );
 
-      const otpData = await otpResponse.json();
+      let otpData;
+
+      try {
+        otpData = await otpResponse.json();
+      } catch {
+
+        otpData = {
+          message: "Invalid OTP",
+        };
+
+      }
+
+      console.log("Verify OTP Response:", otpData);
 
       if (!otpResponse.ok) {
 
@@ -49,6 +59,7 @@ function OTP() {
       }
 
       alert("OTP Verified Successfully");
+      navigate("/home");
 
       // ===============================
       // STEP 2 : REGISTER USER
@@ -68,7 +79,19 @@ function OTP() {
         }
       );
 
-      const registerData = await registerResponse.json();
+      let registerData;
+
+      try {
+        registerData = await registerResponse.json();
+      } catch {
+
+        registerData = {
+          message: "Registration Failed",
+        };
+
+      }
+
+      console.log("Register Response:", registerData);
 
       if (!registerResponse.ok) {
 
@@ -78,7 +101,7 @@ function OTP() {
 
       }
 
-      // Save JWT if backend returns it
+      // Save JWT if backend sends it
       if (registerData.token) {
 
         localStorage.setItem("token", registerData.token);
@@ -91,9 +114,9 @@ function OTP() {
 
     } catch (error) {
 
-      console.log(error);
+      console.error("Network Error:", error);
 
-      alert("Unable to connect to backend");
+      alert("Unable to connect to backend. Please try again.");
 
     }
 
@@ -129,17 +152,9 @@ function OTP() {
 
           <h2>OTP Verification</h2>
 
-          <p>
+          <p>OTP sent to</p>
 
-            OTP sent to
-
-          </p>
-
-          <h3>
-
-            +91 {userData.phone}
-
-          </h3>
+          <h3>+91 {userData.phone}</h3>
 
           <input
             type="text"
@@ -151,9 +166,7 @@ function OTP() {
           />
 
           <button type="submit">
-
             Verify OTP
-
           </button>
 
         </form>
