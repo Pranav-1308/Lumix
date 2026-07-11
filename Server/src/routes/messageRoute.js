@@ -1,24 +1,24 @@
 import express from "express";
 
 import {
-  createOrGetChat,
-  getMyChats,
-} from "../controller/chatController.js";
+    sendMessage,
+    getMessages,
+} from "../controller/messageController.js";
 
 import { verifyJWT } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
 router.post(
-  "/create",
-  verifyJWT,
-  createOrGetChat
+    "/send",
+    verifyJWT,
+    sendMessage
 );
 
 router.get(
-  "/my-chats",
-  verifyJWT,
-  getMyChats
+    "/chat/:chatId",
+    verifyJWT,
+    getMessages
 );
 
 export default router;
