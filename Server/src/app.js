@@ -11,6 +11,14 @@ app.use(
   })
 );
 
+app.use((req, res, next) => {
+
+  req.io = app.get("io");
+
+  next();
+
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
