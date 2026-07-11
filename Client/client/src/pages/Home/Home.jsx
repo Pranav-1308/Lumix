@@ -1,88 +1,77 @@
 import "./Home.css";
 
+import Sidebar from "../../components/Sidebar/Sidebar";
+import TopNavbar from "../../components/TopNavbar/TopNavbar";
+import SearchBar from "../../components/SearchBar/SearchBar";
+import ChatCard from "../../components/ChatCard/ChatCard";
 
-
-// function Home() {
-//   return (
-//     <div>
-//       <h1>Welcome to LUMIX 🎉</h1>
-//     </div>
-//   );
-// }
-
-// export default Home;
 function Home() {
 
-  // Dummy chat data
   const chats = [
     {
       id: 1,
-      name: "Pranav",
-      message: "Hey! Parth, can you show your tattoo? 😄"
+      avatar: "https://i.pravatar.cc/150?img=11",
+      name: "Rahul",
+      message: "Hey! How are you?",
+      time: "10:20 AM",
+      category: "Personal",
+      unread: 2,
     },
     {
       id: 2,
-      name: "Priya",
-      message: "Good Morning ☀️"
+      avatar: "https://i.pravatar.cc/150?img=12",
+      name: "SBI Bank",
+      message: "Your OTP is 458921",
+      time: "10:35 AM",
+      category: "OTP",
+      unread: 1,
     },
     {
       id: 3,
-      name: "Amit",
-      message: "See you tomorrow."
-    }
+      avatar: "https://i.pravatar.cc/150?img=13",
+      name: "Unknown",
+      message: "Congratulations! You won ₹50,000",
+      time: "Yesterday",
+      category: "Spam",
+      unread: 5,
+    },
+    {
+      id: 4,
+      avatar: "https://i.pravatar.cc/150?img=14",
+      name: "HDFC Bank",
+      message: "₹500 Debited Successfully",
+      time: "09:15 AM",
+      category: "Finance",
+      unread: 0,
+    },
   ];
 
   return (
     <div className="home">
 
-      {/* Sidebar */}
+      <Sidebar />
 
-      <div className="sidebar">
+      <div className="main-content">
 
-        <h1>LUMIX</h1>
+        <TopNavbar />
 
-        <input
-          type="text"
-          placeholder="Search Friend..."
-        />
-
-        <h3>Chats</h3>
+        <SearchBar />
 
         <div className="chat-list">
 
           {chats.map((chat) => (
-
-            <div className="chat-card" key={chat.id}>
-
-              <div className="avatar">
-                {chat.name.charAt(0)}
-              </div>
-
-              <div className="chat-info">
-
-                <h4>{chat.name}</h4>
-
-                <p>{chat.message}</p>
-
-              </div>
-
-            </div>
-
+            <ChatCard
+              key={chat.id}
+              avatar={chat.avatar}
+              name={chat.name}
+              message={chat.message}
+              time={chat.time}
+              category={chat.category}
+              unread={chat.unread}
+            />
           ))}
 
         </div>
-
-      </div>
-
-      {/* Chat Area */}
-
-      <div className="chat-area">
-
-        <h2>Welcome to LUMIX 👋</h2>
-
-        <p>
-          Select a chat from the left side to start messaging.
-        </p>
 
       </div>
 

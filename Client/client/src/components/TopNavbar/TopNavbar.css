@@ -1,0 +1,187 @@
+/* ===========================
+        TOP NAVBAR
+=========================== */
+
+.top-navbar{
+
+    width:100%;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    background:white;
+
+    padding:20px 30px;
+
+    border-radius:18px;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+
+}
+
+/* ===========================
+      LEFT SECTION
+=========================== */
+
+.navbar-left h1{
+
+    color:#2563eb;
+
+    font-size:32px;
+
+    font-weight:700;
+
+}
+
+.navbar-left p{
+
+    color:#64748b;
+
+    margin-top:5px;
+
+    font-size:14px;
+
+}
+
+/* ===========================
+      RIGHT SECTION
+=========================== */
+
+.navbar-right{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+}
+
+/* ===========================
+         ICONS
+=========================== */
+
+.nav-icon{
+
+    position:relative;
+
+    width:48px;
+
+    height:48px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:#f8fafc;
+
+    border-radius:50%;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+    font-size:20px;
+
+    color:#334155;
+
+}
+
+.nav-icon:hover{
+
+    background:#2563eb;
+
+    color:white;
+
+    transform:translateY(-3px);
+
+}
+
+/* Notification Badge */
+
+.badge{
+
+    position:absolute;
+
+    top:-4px;
+
+    right:-4px;
+
+    width:20px;
+
+    height:20px;
+
+    background:#ef4444;
+
+    color:white;
+
+    border-radius:50%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:11px;
+
+    font-weight:bold;
+
+}
+
+/* ===========================
+      USER AVATAR
+=========================== */
+
+.user-avatar{
+
+    width:50px;
+
+    height:50px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    border:3px solid #2563eb;
+
+    cursor:pointer;
+
+}
+
+/* ===========================
+        RESPONSIVE
+=========================== */
+
+@media(max-width:768px){
+
+.top-navbar{
+
+    flex-direction:column;
+
+    gap:20px;
+
+    padding:20px;
+
+}
+
+.navbar-left{
+
+    text-align:center;
+
+}
+
+.navbar-right{
+
+    width:100%;
+
+    justify-content:center;
+
+}
+
+}

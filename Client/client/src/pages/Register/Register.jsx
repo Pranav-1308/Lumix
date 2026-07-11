@@ -155,7 +155,7 @@ function Register() {
 
           </div>
 
-          {/* Name */}
+          /* Name */
 
           <div className="input-box">
 
@@ -171,7 +171,7 @@ function Register() {
 
           </div>
 
-          {/* Phone */}
+          /* Phone */
 
           <div className="input-box">
 

@@ -1,0 +1,261 @@
+.sidebar{
+
+    width:280px;
+    height:100vh;
+
+    background:#0f172a;
+
+    color:white;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:space-between;
+
+    padding:25px;
+
+    flex-shrink:0;
+
+}
+
+/* ======================
+      PROFILE
+====================== */
+
+.profile{
+
+    text-align:center;
+
+}
+
+.profile img{
+
+    width:100px;
+
+    height:100px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    border:4px solid #38bdf8;
+
+}
+
+.profile h2{
+
+    margin-top:15px;
+
+    font-size:24px;
+
+    font-weight:600;
+
+    color:white;
+
+}
+
+.profile p{
+
+    margin-top:8px;
+
+    color:#38bdf8;
+
+    font-size:15px;
+
+}
+
+/* ======================
+        MENU
+====================== */
+
+.menu{
+
+    list-style:none;
+
+    margin-top:40px;
+
+    flex:1;
+
+}
+
+.menu li{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    padding:15px 18px;
+
+    margin-bottom:12px;
+
+    border-radius:14px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+    color:#e2e8f0;
+
+    font-size:16px;
+
+}
+
+.menu li:hover{
+
+    background:#1e40af;
+
+    transform:translateX(5px);
+
+}
+
+.menu li svg{
+
+    font-size:20px;
+
+}
+
+.active{
+
+    background:#2563eb;
+
+    color:white;
+
+}
+
+/* ======================
+      LOGOUT
+====================== */
+
+.logout-btn{
+
+    width:100%;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:10px;
+
+    padding:15px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:#ef4444;
+
+    color:white;
+
+    cursor:pointer;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.logout-btn:hover{
+
+    background:#dc2626;
+
+    transform:translateY(-2px);
+
+}
+
+/* ======================
+      RESPONSIVE
+====================== */
+
+@media(max-width:900px){
+
+.sidebar{
+
+    width:90px;
+
+    padding:20px 10px;
+
+}
+
+.profile h2,
+.profile p,
+.menu span,
+.logout-btn span{
+
+    display:none;
+
+}
+
+.profile img{
+
+    width:60px;
+    height:60px;
+
+}
+
+.menu li{
+
+    justify-content:center;
+
+}
+
+.logout-btn{
+
+    padding:15px;
+
+}
+
+}
+
+@media(max-width:768px){
+
+.sidebar{
+
+    width:100%;
+    height:auto;
+
+    flex-direction:row;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:15px;
+
+}
+
+.profile{
+
+    display:none;
+
+}
+
+.menu{
+
+    display:flex;
+
+    margin:0;
+
+    gap:10px;
+
+}
+
+.menu li{
+
+    margin:0;
+
+}
+
+.logout-btn{
+
+    width:auto;
+
+}
+
+}
