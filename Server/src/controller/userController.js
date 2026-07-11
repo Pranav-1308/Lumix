@@ -57,7 +57,7 @@ if (req.file) {
     throw new Error("Avatar upload to Cloudinary failed");
   }
 
-  const avatarUrl = avatar.secure_url;
+   avatarUrl = avatar.secure_url;
 
   console.log("Avatar URL:", avatarUrl);
 }
@@ -68,16 +68,21 @@ if (req.file) {
     avatar: avatarUrl,
   });
 
+  const accessToken = generateAccessToken(user);
+
   console.log("Saved user:", user);
   console.log("Saved name:", user.name);
   console.log("Saved phone:", user.phone);
   console.log("Saved avatar URL:", user.avatar);
 
-  return res.status(201).json({
+ return res.status(201).json({
     success: true,
     message: "User registered successfully",
-    user,
-  });
+    data: {
+        user,
+        accessToken,
+    },
+});
 });
 
  const searchUsers = asyncHandler(async (req, res) => {
