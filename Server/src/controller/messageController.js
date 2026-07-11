@@ -71,6 +71,11 @@ const sendMessage = asyncHandler(async (req, res) => {
     chat.latestMessage = message._id;
     await chat.save();
 
+    // Emit real-time event
+    req.io
+        .to(chatId)
+        .emit("receive-message", message);
+
     return res.status(201).json({
         success: true,
         message: "Message sent successfully",
