@@ -1,79 +1,81 @@
-import "./Sidebar.css";
+import { useState } from "react";
+import "./SideBar.css";
 
-import {
-  FaHome,
-  FaUser,
-  FaShieldAlt,
-  FaExclamationTriangle,
-  FaMoneyCheckAlt,
-  FaCog,
-  FaSignOutAlt,
-} from "react-icons/fa";
+import { FaCommentDots, FaLayerGroup, FaSignOutAlt } from "react-icons/fa";
 
-function Sidebar() {
+const FILTERS = [
+  { key: "all",      label: "All Chats" },
+  { key: "personal", label: "Personal"  },
+  { key: "otp",      label: "OTP"       },
+  { key: "spam",     label: "Spam"      },
+  { key: "finance",  label: "Finance"   },
+];
+
+function Sidebar({ activeView, setActiveView }) {
+  const [inboxOpen, setInboxOpen] = useState(false);
+
+  const handleInboxClick = () => {
+    setInboxOpen((prev) => !prev);
+  };
+
+  const handleFilterSelect = (key) => {
+    setActiveView(key);
+    setInboxOpen(false);
+  };
+
   return (
     <aside className="sidebar">
 
-      {/* Profile */}
-
-      <div className="profile">
-
-        <img
-          src="https://i.pravatar.cc/150?img=15"
-          alt="Profile"
-        />
-
-        <h2>Soni</h2>
-
-        <p>🟢 Online</p>
-
+      {/* ── Logo ────────────────────── */}
+      <div className="sidebar-logo">
+        <span>L</span>
       </div>
 
-      {/* Menu */}
+      {/* ── Nav Icons ───────────────── */}
+      <nav className="sidebar-nav">
 
-      <ul className="menu">
+        {/* All Chats */}
+        <div
+          className={`rail-icon ${activeView === "all" && !inboxOpen ? "active" : ""}`}
+          title="All Chats"
+          onClick={() => { setActiveView("all"); setInboxOpen(false); }}
+        >
+          <FaCommentDots />
+        </div>
 
-        <li className="active">
-          <FaHome />
-          <span>Home</span>
-        </li>
+        {/* Inbox / Filter */}
+        <div className="rail-icon-wrapper">
+          <div
+            className={`rail-icon ${inboxOpen ? "active" : ""}`}
+            title="Inbox"
+            onClick={handleInboxClick}
+          >
+            <FaLayerGroup />
+          </div>
 
-        <li>
-          <FaUser />
-          <span>Profile</span>
-        </li>
+          {/* Filter Sub-Panel */}
+          {inboxOpen && (
+            <div className="filter-panel">
+              <p className="filter-panel-title">Inbox</p>
+              {FILTERS.map((f) => (
+                <button
+                  key={f.key}
+                  className={`filter-item ${activeView === f.key ? "filter-active" : ""}`}
+                  onClick={() => handleFilterSelect(f.key)}
+                >
+                  {f.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
 
-        <li>
-          <FaShieldAlt />
-          <span>OTP</span>
-        </li>
+      </nav>
 
-        <li>
-          <FaExclamationTriangle />
-          <span>Spam</span>
-        </li>
-
-        <li>
-          <FaMoneyCheckAlt />
-          <span>Finance</span>
-        </li>
-
-        <li>
-          <FaCog />
-          <span>Settings</span>
-        </li>
-
-      </ul>
-
-      {/* Logout */}
-
-      <button className="logout-btn">
-
+      {/* ── Logout ──────────────────── */}
+      <div className="rail-icon logout-icon" title="Logout">
         <FaSignOutAlt />
-
-        <span>Logout</span>
-
-      </button>
+      </div>
 
     </aside>
   );

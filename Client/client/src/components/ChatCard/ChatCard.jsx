@@ -1,52 +1,27 @@
 import "./ChatCard.css";
 
-function ChatCard({
-  avatar,
-  name,
-  message,
-  time,
-  category,
-  unread,
-}) {
+function ChatCard({ avatar, name, message, time, unread, isOnline, isActive, onClick }) {
   return (
-    <div className="chat-card">
+    <div className={`chat-card ${isActive ? "active" : ""}`} onClick={onClick}>
 
-      {/* Avatar */}
+      {/* Avatar + online dot */}
+      <div className="cc-avatar-wrap">
+        <img src={avatar} alt={name} className="cc-avatar" />
+        {isOnline && <span className="cc-online-dot" />}
+      </div>
 
-      <img
-        src={avatar}
-        alt={name}
-        className="chat-avatar"
-      />
-
-      {/* Chat Information */}
-
-      <div className="chat-info">
-
-        <div className="chat-header">
-
-          <h3>{name}</h3>
-
-          <span>{time}</span>
-
+      {/* Info */}
+      <div className="cc-info">
+        <div className="cc-row">
+          <span className="cc-name">{name}</span>
+          <span className="cc-time">{time}</span>
         </div>
-
-        <p>{message}</p>
-
-        <div className="chat-footer">
-
-          <span className={`category ${category.toLowerCase()}`}>
-            {category}
-          </span>
-
+        <div className="cc-row">
+          <span className="cc-preview">{message}</span>
           {unread > 0 && (
-            <span className="unread-count">
-              {unread}
-            </span>
+            <span className="cc-unread">{unread}</span>
           )}
-
         </div>
-
       </div>
 
     </div>
