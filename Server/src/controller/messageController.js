@@ -2,7 +2,7 @@ import { Chat } from "../models/chatmodel.js";
 import { Message } from "../models/messagemodel.js";
 import { ApiError } from "../utils/ApiError.js";
 import { asyncHandler } from "../utils/asynchandler.js";
-
+import classifyMessage from "../utils/classifyMessage.js";
 
 
 // SEND MESSAGE
@@ -141,7 +141,39 @@ const getMessages = asyncHandler(async (req, res) => {
     });
 });
 
+const getMessagesByCategory = asyncHandler(async (req, res) => {
+
+    const { category } = req.params;
+
+    const validCategories = [
+        "personal",
+        "otp",
+        "bank",
+        "offer",
+        "other",
+    ];
+
+    if (!validCategories.includes(category)) {
+        throw new ApiError(400, "Invalid category");
+    }
+
+    const messages = await Message.find({
+        category,
+    })
+        .populate("sender", "name phone avatar")
+        .populate("chat")
+        .sort({ createdAt: -1 });
+
+    return res.status(200).json({
+        success: true,
+        message: `${category} messages fetched successfully`,
+        data: messages,
+    });
+
+});
+
 export {
     sendMessage,
     getMessages,
+    getMessagesByCategory,
 };
