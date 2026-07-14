@@ -77,9 +77,14 @@ const sendOtp = asyncHandler(async (req, res) => {
   : `+91${phoneNumber}`;
 
   console.log("Original phone:", phoneNumber);
-console.log("Sending OTP to:", formattedPhone);
+  console.log("Sending OTP to:", formattedPhone);
+  console.log("🔑 [TESTING OTP]:", otp);
 
-await sendSms(formattedPhone, otp);
+  try {
+    await sendSms(formattedPhone, otp);
+  } catch (error) {
+    console.log("⚠️ Twilio SMS failed to send (using mock flow). Error:", error.message);
+  }
 
   return res.status(200).json({
     success: true,

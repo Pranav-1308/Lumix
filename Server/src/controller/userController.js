@@ -88,19 +88,14 @@ if (req.file) {
  const searchUsers = asyncHandler(async (req, res) => {
     const query = req.query.query?.trim();
 
-    if (!query) {
-        throw new ApiError(
-            400,
-            "Search query is required"
-        );
-    }
-
-    const users = await User.find({
+    let searchCriteria = {
         _id: {
             $ne: req.user._id,
         },
+    };
 
-        $or: [
+    if (query) {
+        searchCriteria.$or = [
             {
                 name: {
                     $regex: query,
@@ -113,8 +108,10 @@ if (req.file) {
                     $options: "i",
                 },
             },
-        ],
-    })
+        ];
+    }
+
+    const users = await User.find(searchCriteria)
         .select("name phone avatar")
         .limit(20);
 
