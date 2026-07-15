@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FaCamera, FaUser, FaPhoneAlt } from "react-icons/fa";
 import { useUser } from "../../context/UserContext";
-import "./Register.css";
+import AuthLayout from "../../components/AuthLayout/AuthLayout";
 
 function Register() {
 
@@ -86,128 +85,87 @@ function Register() {
   };
 
   return (
+    <AuthLayout
+      headline="Connect Beyond Messages"
+      sub="Chat with your friends securely and instantly."
+      features={[
+        { icon: "💬", text: "Instant Messaging" },
+        { icon: "🔒", text: "Secure Chat" },
+        { icon: "🌍", text: "Connect Anywhere" }
+      ]}
+    >
+      <form onSubmit={handleSubmit}>
+        <h2>Create Account</h2>
+        <p className="welcome">Welcome to LUMIX 👋</p>
 
-    <div className="register-page">
+        <div className="upload-wrap">
+          <label htmlFor="avatar" className="upload-circle">
+            {preview ? (
+              <img
+                src={preview}
+                alt="Avatar Preview"
+                style={{ width: "100%", height: "100%", borderRadius: "50%", objectFit: "cover", position: "absolute", inset: 0, zIndex: 3 }}
+              />
+            ) : (
+              <div className="inner">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M4 8h3l2-2h6l2 2h3v11H4z"/>
+                  <circle cx="12" cy="13" r="3.2"/>
+                </svg>
+                <span>Upload Photo</span>
+              </div>
+            )}
+          </label>
+        </div>
+        <input
+          type="file"
+          id="avatar"
+          hidden
+          accept="image/*"
+          onChange={handleImageChange}
+          required
+        />
 
-      {/* Left Side */}
-
-      <div className="left-side">
-
-        <div className="brand">
-
-          <h1>LUMIX</h1>
-
-          <h2>Connect Beyond Messages</h2>
-
-          <p>
-            Chat with your friends securely and instantly.
-          </p>
-
-          <ul>
-            <li>💬 Instant Messaging</li>
-            <li>🔒 Secure Chat</li>
-            <li>🌍 Connect Anywhere</li>
-          </ul>
-
+        <div className="field">
+          <input
+            type="text"
+            placeholder="Full Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+          <span className="icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/>
+            </svg>
+          </span>
         </div>
 
-      </div>
+        <div className="field">
+          <input
+            type="tel"
+            placeholder="Phone Number"
+            value={phone}
+            maxLength={10}
+            onChange={(e) => setPhone(e.target.value)}
+            required
+          />
+          <span className="icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.5 2.1L8 9.7a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.7 2z"/>
+            </svg>
+          </span>
+        </div>
 
-      {/* Right Side */}
+        <button type="submit" className="cta">
+          Send OTP
+        </button>
 
-      <div className="right-side">
-
-        <form className="register-card" onSubmit={handleSubmit}>
-
-          <h2>Create Account</h2>
-
-          <p>Welcome to LUMIX 👋</p>
-
-          {/* Avatar */}
-
-          <div className="avatar-upload">
-
-            <label htmlFor="avatar">
-
-              {preview ? (
-
-                <img src={preview} alt="Avatar" />
-
-              ) : (
-
-                <>
-                  <FaCamera className="camera-icon" />
-                  <span>Upload Photo</span>
-                </>
-
-              )}
-
-            </label>
-
-            <input
-              type="file"
-              id="avatar"
-              hidden
-              accept="image/*"
-              onChange={handleImageChange}
-              required
-            />
-
-          </div>
-
-          {/* Name */}
-
-          <div className="input-box">
-
-            <FaUser />
-
-            <input
-              type="text"
-              placeholder="Full Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-
-          </div>
-
-          {/* Phone */}
-
-          <div className="input-box">
-
-            <FaPhoneAlt />
-
-            <input
-              type="text"
-              placeholder="Phone Number"
-              value={phone}
-              maxLength={10}
-              onChange={(e) => setPhone(e.target.value)}
-              required
-            />
-
-          </div>
-
-          <button type="submit">
-            Send OTP
-          </button>
-
-          <p className="bottom-text">
-
-            Already have an account?
-
-            <Link to="/login">
-              Login
-            </Link>
-
-          </p>
-
-        </form>
-
-      </div>
-
-    </div>
-
+        <p className="login-line">
+          Already have an account? <Link to="/login">Login</Link>
+        </p>
+      </form>
+    </AuthLayout>
   );
 
 }
