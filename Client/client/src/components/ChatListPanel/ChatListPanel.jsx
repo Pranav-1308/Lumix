@@ -274,8 +274,8 @@ function ChatListPanel({ chats, selectedChatId, onSelectChat, activeView }) {
     all: "All Chats",
     personal: "Personal",
     otp: "OTP",
-    spam: "Spam",
-    finance: "Finance",
+    Offer: "Offers",
+    Bank: "Bank",
   };
 
   return (

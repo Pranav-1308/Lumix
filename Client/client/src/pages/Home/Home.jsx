@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "./Home.css";
 
-import Sidebar from "../../components/Sidebar/SideBar";
+import Sidebar from "../../components/Sidebar/Sidebar";
 import ChatListPanel from "../../components/ChatListPanel/ChatListPanel";
 import ChatWindow from "../../components/ChatWindow/ChatWindow";
 
@@ -35,7 +35,6 @@ function Home() {
         // 1. Fetch Logged In User Profile
         const profileResponse = await api.get("/user/profile");
         const loggedInUser = profileResponse.data.data;
-        setUser(loggedInUser);
 
         // 2. Fetch Active Chats
         const chatsResponse = await api.get("/chats/my-chats");
@@ -219,10 +218,10 @@ function Home() {
         prevChats.map((chat) =>
           chat.id === chatId
             ? {
-              ...chat,
-              message: message.content,
-              isPlaceholder: false,
-            }
+                ...chat,
+                message: message.content,
+                isPlaceholder: false,
+              }
             : chat
         )
       );
