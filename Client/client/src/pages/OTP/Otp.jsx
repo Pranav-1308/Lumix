@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../../context/UserContext";
-import "./OTP.css";
+import AuthLayout from "../../components/AuthLayout/AuthLayout";
 
 function OTP() {
 
@@ -138,42 +138,17 @@ function OTP() {
   };
 
   return (
+    <AuthLayout
+      headline="Verify Your OTP"
+      sub="Enter the OTP sent to your phone number to complete registration."
+    >
+      <form onSubmit={handleSubmit}>
+        <h2>OTP Verification</h2>
+        <p className="welcome">
+          OTP sent to <strong style={{ color: "var(--violet)" }}>+91 {userData?.phone}</strong>
+        </p>
 
-    <div className="otp-page">
-
-      {/* Left Side */}
-
-      <div className="left-side">
-
-        <div className="brand">
-
-          <h1>LUMIX</h1>
-
-          <h2>Verify Your OTP</h2>
-
-          <p>
-            Enter the OTP sent to your phone number.
-          </p>
-
-        </div>
-
-      </div>
-
-      {/* Right Side */}
-
-      <div className="right-side">
-
-        <form
-          className="otp-card"
-          onSubmit={handleSubmit}
-        >
-
-          <h2>OTP Verification</h2>
-
-          <p>OTP sent to</p>
-
-          <h3>+91 {userData.phone}</h3>
-
+        <div className="field">
           <input
             type="text"
             placeholder="Enter 6 Digit OTP"
@@ -181,23 +156,25 @@ function OTP() {
             maxLength={6}
             onChange={(e) => setOtp(e.target.value)}
             required
+            style={{ letterSpacing: "2px", fontFamily: "monospace" }}
           />
+          <span className="icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+          </span>
+        </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-          >
+        <button type="submit" className="cta" disabled={loading}>
+          {loading ? "Verifying..." : "Verify OTP"}
+        </button>
 
-            {loading ? "Verifying..." : "Verify OTP"}
-
-          </button>
-
-        </form>
-
-      </div>
-
-    </div>
-
+        <p className="login-line">
+          Incorrect number? <Link to="/">Change details</Link>
+        </p>
+      </form>
+    </AuthLayout>
   );
 
 }
