@@ -1,37 +1,49 @@
-import {mongoose} from "mongoose"
+import { mongoose } from "mongoose"
 
 const messageSchema = new mongoose.Schema(
-    {
-         chat:{
+   {
+      chat: {
+         type: mongoose.Schema.Types.ObjectId,
+         ref: "Chat",
+         required: true
+      },
+
+      sender: {
+         type: mongoose.Schema.Types.ObjectId,
+         ref: "User",
+         required: true
+      },
+
+      content: {
+         type: String,
+         required: true,
+         trim: true
+      },
+
+      category: {
+         type: String,
+         enum: [
+            "personal",
+            "otp",
+            "bank",
+            "offer",
+            "spam",
+         ],
+         default: "personal",
+      },
+
+      messageType: {
+         type: String,
+         enum: ["text"],
+         default: "text"
+      },
+
+      readby: [
+         {
             type: mongoose.Schema.Types.ObjectId,
-            ref:"Chat",
-            required:true
-         },
+            ref: "User"
+         }
+      ]
+   }, { timestamp: true })
 
-         sender:{
-            type: mongoose.Schema.Types.ObjectId,
-            ref:"User",
-            required:true
-         },
-
-         content:{
-            type:String,
-            required:true,
-            trim:true
-         },
-
-         messageType:{
-            type:String,
-            enum:["text"],
-            default:"text"
-         },
-
-         readby:[
-            {
-                type:mongoose.Schema.Types.ObjectId,
-                ref:"User"
-            }
-         ]
-},{timestamp:true})
-
-export const Message = mongoose.model("Message",messageSchema)
+export const Message = mongoose.model("Message", messageSchema)
