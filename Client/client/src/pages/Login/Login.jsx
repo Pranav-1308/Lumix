@@ -1,11 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FaPhoneAlt } from "react-icons/fa";
-
 import api from "../../services/api";
 import { useUser } from "../../context/UserContext";
-
-import "./Login.css";
+import AuthLayout from "../../components/AuthLayout/AuthLayout";
 
 function Login() {
 
@@ -68,103 +65,44 @@ function Login() {
   };
 
   return (
+    <AuthLayout
+      headline="Welcome Back 👋"
+      sub="Continue your conversations with your friends. Fast, secure and beautiful messaging experience."
+      features={[
+        { icon: "💬", text: "Real-Time Messaging" },
+        { icon: "🔒", text: "Secure Communication" },
+        { icon: "🌍", text: "Stay Connected Everywhere" }
+      ]}
+    >
+      <form onSubmit={handleSubmit}>
+        <h2>Welcome Back</h2>
+        <p className="welcome">Login to your account</p>
 
-    <div className="login-page">
-
-      {/* Left Side */}
-
-      <div className="left-side">
-
-        <div className="brand">
-
-          <h1>LUMIX</h1>
-
-          <h2>Welcome Back 👋</h2>
-
-          <p>
-
-            Continue your conversations with your friends.
-
-            Fast, secure and beautiful messaging experience.
-
-          </p>
-
-          <ul>
-
-            <li>💬 Real-Time Messaging</li>
-
-            <li>🔒 Secure Communication</li>
-
-            <li>🌍 Stay Connected Everywhere</li>
-
-          </ul>
-
+        <div className="field">
+          <input
+            type="tel"
+            placeholder="Phone Number"
+            value={phone}
+            maxLength={10}
+            onChange={(e) => setPhone(e.target.value)}
+            required
+          />
+          <span className="icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.5 2.1L8 9.7a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.7 2z"/>
+            </svg>
+          </span>
         </div>
 
-      </div>
+        <button type="submit" className="cta" disabled={loading}>
+          {loading ? "Sending..." : "Continue"}
+        </button>
 
-      {/* Right Side */}
-
-      <div className="right-side">
-
-        <form
-          className="login-card"
-          onSubmit={handleSubmit}
-        >
-
-          <h2>Welcome Back</h2>
-
-          <p>Login to your account</p>
-
-          <div className="input-box">
-
-            <FaPhoneAlt />
-
-            <input
-
-              type="tel"
-
-              placeholder="Phone Number"
-
-              maxLength={10}
-
-              value={phone}
-
-              onChange={(e) => setPhone(e.target.value)}
-
-              required
-
-            />
-
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-          >
-
-            {loading ? "Sending..." : "Continue"}
-
-          </button>
-
-          <p className="bottom-text">
-
-            Don't have an account?
-
-            <Link to="/">
-
-              Register
-
-            </Link>
-
-          </p>
-
-        </form>
-
-      </div>
-
-    </div>
-
+        <p className="login-line">
+          Don't have an account? <Link to="/">Register</Link>
+        </p>
+      </form>
+    </AuthLayout>
   );
 
 }

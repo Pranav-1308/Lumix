@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "./Home.css";
 
-import Sidebar from "../../components/Sidebar/Sidebar";
+import Sidebar from "../../components/Sidebar/SideBar";
 import ChatListPanel from "../../components/ChatListPanel/ChatListPanel";
 import ChatWindow from "../../components/ChatWindow/ChatWindow";
 
@@ -219,10 +219,10 @@ function Home() {
         prevChats.map((chat) =>
           chat.id === chatId
             ? {
-                ...chat,
-                message: message.content,
-                isPlaceholder: false,
-              }
+              ...chat,
+              message: message.content,
+              isPlaceholder: false,
+            }
             : chat
         )
       );
