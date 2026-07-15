@@ -4,6 +4,10 @@ import {
     sendMessage,
     getMessages,
     getMessagesByCategory,
+    getCategoryStats,
+    getLatestCategoryMessages,
+    getRecentMessages,
+    getMonthlyStats,
 } from "../controller/messageController.js";
 
 import { verifyJWT } from "../middleware/auth.middleware.js";
@@ -28,4 +32,26 @@ router.get(
     getMessages
 );
 
+router.get("/stats",
+    verifyJWT,
+    getCategoryStats
+)
+
+router.get(
+    "/latest-category",
+    verifyJWT,
+    getLatestCategoryMessages
+);
+
+router.get(
+    "/recent",
+    verifyJWT,
+    getRecentMessages
+);
+
+router.get(
+    "/monthly-stats",
+    verifyJWT,
+    getMonthlyStats
+);
 export default router;
