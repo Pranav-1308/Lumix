@@ -245,19 +245,25 @@
 
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./SideBar.css";
 
 import { FaCommentDots, FaLayerGroup, FaSignOutAlt } from "react-icons/fa";
+import socket from "../../services/socket";
+import { useUser } from "../../context/UserContext";
 
 const FILTERS = [
   { key: "all", label: "All Chats" },
   { key: "personal", label: "Personal" },
   { key: "otp", label: "OTP" },
-  { key: "spam", label: "Spam" },
-  { key: "finance", label: "Finance" },
+  { key: "Offer", label: "Offers" },
+  { key: "Bank", label: "Bank" },
 ];
 
 function Sidebar({ activeView, setActiveView }) {
+
+  const navigate = useNavigate();
+  const { logout } = useUser();
   const [inboxOpen, setInboxOpen] = useState(false);
 
   const handleInboxClick = () => {
@@ -268,6 +274,27 @@ function Sidebar({ activeView, setActiveView }) {
     setActiveView(key);
     setInboxOpen(false);
   };
+
+  const handleLogout = () => {
+
+  try {
+
+    // Disconnect Socket
+    socket.disconnect();
+
+  } catch (error) {
+
+    console.log("Socket Disconnect Error:", error);
+
+  }
+
+  // Clear Context + LocalStorage
+  logout();
+
+  // Navigate to Login
+  navigate("/login", { replace: true });
+
+};
 
   return (
     <aside className="sidebar">
@@ -319,7 +346,7 @@ function Sidebar({ activeView, setActiveView }) {
       </nav>
 
       {/* ── Logout ──────────────────── */}
-      <div className="rail-icon logout-icon" title="Logout">
+      <div className="rail-icon logout-icon" title="Logout" onClick={handleLogout}>
         <FaSignOutAlt />
       </div>
 
