@@ -145,36 +145,95 @@ const getMessages = asyncHandler(async (req, res) => {
     });
 });
 
-const getCategoryStats = asyncHandler(async (req, res) => {
+const getDashboardData = asyncHandler(async (req, res) => {
+const dashboard = await Message.aggregate([
+    {
+        $facet: {
 
-    const stats = await Message.aggregate([
+            categoryStats: [
+                {
+                    $group: {
+                        _id: "$category",
+                        count: {
+                            $sum: 1,
+                        },
+                    },
+                },
+            ],
+
+            latestMessages: [
+                {
+                    $sort: {
+                        createdAt: -1,
+                    },
+                },
+                {
+                    $group: {
+                        _id: "$category",
+                        latestMessage: {
+                            $first: "$content",
+                        },
+                        createdAt: {
+                            $first: "$createdAt",
+                        },
+                    },
+                },
+            ],
+
+            recentMessages: [
+                {
+                    $sort: {
+                        createdAt: -1,
+                    },
+                },
+                {
+                    $limit: 5,
+                },
+            ],
+
+        },
+    },
+]);
+
+return res.status(200).json({
+    success: true,
+    message: "Dashboard data fetched successfully",
+    data: dashboard[0],
+});
+});
+
+
+const getMonthlyStats = asyncHandler(async (req, res) => {
+
+    const monthlyStats = await Message.aggregate([
         {
             $group: {
-                _id: "$category",
-                count: {
+                _id: {
+                    year: {
+                        $year: "$createdAt",
+                    },
+                    month: {
+                        $month: "$createdAt",
+                    },
+                },
+                totalMessages: {
                     $sum: 1,
                 },
+            },
+        },
+        {
+            $sort: {
+                "_id.year": 1,
+                "_id.month": 1,
             },
         },
     ]);
 
     return res.status(200).json({
         success: true,
-        message: "Category statistics fetched successfully",
-        data: stats,
+        message: "Monthly statistics fetched successfully",
+        data: monthlyStats,
     });
-
-});
-
-const getLatestCategoryMessages = asyncHandler(async (req, res) => {
-
-});
-
-const getRecentMessages = asyncHandler(async (req, res) => {
-
-});
-
-const getMonthlyStats = asyncHandler(async (req, res) => {
 
 });
 
@@ -212,11 +271,9 @@ const getMessagesByCategory = asyncHandler(async (req, res) => {
 });
 
 export {
-    getCategoryStats,
-    getLatestCategoryMessages,
     getMessages,
     getMessagesByCategory,
     getMonthlyStats,
-    getRecentMessages,
-    sendMessage
+    sendMessage,
+    getDashboardData,
 };

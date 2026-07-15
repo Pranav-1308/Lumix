@@ -4,9 +4,7 @@ import {
     sendMessage,
     getMessages,
     getMessagesByCategory,
-    getCategoryStats,
-    getLatestCategoryMessages,
-    getRecentMessages,
+    getDashboardData,
     getMonthlyStats,
 } from "../controller/messageController.js";
 
@@ -32,21 +30,10 @@ router.get(
     getMessages
 );
 
-router.get("/stats",
-    verifyJWT,
-    getCategoryStats
-)
-
 router.get(
-    "/latest-category",
+    "/dashboard",
     verifyJWT,
-    getLatestCategoryMessages
-);
-
-router.get(
-    "/recent",
-    verifyJWT,
-    getRecentMessages
+    getDashboardData
 );
 
 router.get(
