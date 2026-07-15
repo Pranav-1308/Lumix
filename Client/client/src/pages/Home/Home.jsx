@@ -7,7 +7,6 @@ import ChatWindow from "../../components/ChatWindow/ChatWindow";
 
 import api from "../../services/api";
 import socket from "../../services/socket";
-
 import { useUser } from "../../context/UserContext";
 
 function Home() {
