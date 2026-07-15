@@ -45,11 +45,15 @@ const sendMessage = asyncHandler(async (req, res) => {
         );
     }
 
+const category = classifyMessage(content);
+
     // Create message
     let message = await Message.create({
         chat: chatId,
         sender: req.user._id,
         content: content.trim(),
+        category,
+
     });
 
     // Populate sender
@@ -141,6 +145,39 @@ const getMessages = asyncHandler(async (req, res) => {
     });
 });
 
+const getCategoryStats = asyncHandler(async (req, res) => {
+
+    const stats = await Message.aggregate([
+        {
+            $group: {
+                _id: "$category",
+                count: {
+                    $sum: 1,
+                },
+            },
+        },
+    ]);
+
+    return res.status(200).json({
+        success: true,
+        message: "Category statistics fetched successfully",
+        data: stats,
+    });
+
+});
+
+const getLatestCategoryMessages = asyncHandler(async (req, res) => {
+
+});
+
+const getRecentMessages = asyncHandler(async (req, res) => {
+
+});
+
+const getMonthlyStats = asyncHandler(async (req, res) => {
+
+});
+
 const getMessagesByCategory = asyncHandler(async (req, res) => {
 
     const { category } = req.params;
@@ -170,10 +207,16 @@ const getMessagesByCategory = asyncHandler(async (req, res) => {
         data: messages,
     });
 
+
+
 });
 
 export {
-    sendMessage,
+    getCategoryStats,
+    getLatestCategoryMessages,
     getMessages,
     getMessagesByCategory,
+    getMonthlyStats,
+    getRecentMessages,
+    sendMessage
 };
