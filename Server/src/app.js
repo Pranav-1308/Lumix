@@ -3,10 +3,21 @@ import express from "express";
 import router from "./routes/index.js";
 
 const app = express();
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://mama-sycamore-delighted.ngrok-free.dev",
+];
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+        return callback(new Error("Not allowed by CORS"), false);
+    },
     credentials: true,
   })
 );

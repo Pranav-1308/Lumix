@@ -4,7 +4,9 @@ import { User } from "../models/usermodel.js";
 import { ApiError } from "../utils/ApiError.js";
 import { asyncHandler } from "../utils/asynchandler.js";
 
+
 const verifyJWT = asyncHandler(async (req, res, next) => {
+    
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
