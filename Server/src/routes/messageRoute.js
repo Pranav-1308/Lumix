@@ -1,11 +1,13 @@
 import express from "express";
 
 import {
-    sendMessage,
-    getMessages,
-    getMessagesByCategory,
+    // getMessagesByCategory,
     getDashboardData,
+    getInbox,
+    getInboxHistory,
+    getMessages,
     getMonthlyStats,
+    sendMessage,
 } from "../controller/messageController.js";
 
 import { verifyJWT } from "../middleware/auth.middleware.js";
@@ -19,10 +21,23 @@ router.post(
 );
 
 router.get(
-    "/category/:category",
+    "/inbox",
     verifyJWT,
-    getMessagesByCategory
+    getInbox
 );
+
+router.get(
+    "/inboxhistory",
+    verifyJWT,
+    getInboxHistory
+);
+
+// router.get(
+//     "/category/:category",
+//     verifyJWT,
+//     getMessagesByCategory
+// );
+
 
 router.get(
     "/chat/:chatId",

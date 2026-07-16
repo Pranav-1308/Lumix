@@ -48,13 +48,17 @@ const sendMessage = asyncHandler(async (req, res) => {
 const category = classifyMessage(content);
 
     // Create message
-    let message = await Message.create({
-        chat: chatId,
-        sender: req.user._id,
-        content: content.trim(),
-        category,
+   const receiver = chat.participants.find(
+    p => p.toString() !== req.user._id.toString()
+);
 
-    });
+message = await Message.create({
+    chat: chatId,
+    sender: req.user._id,
+    receiver,
+    content: content.trim(),
+    category,
+});
 
     // Populate sender
     message = await message.populate(
@@ -143,6 +147,8 @@ const getMessages = asyncHandler(async (req, res) => {
         message: "Messages fetched successfully",
         data: messages,
     });
+
+
 });
 
 const getDashboardData = asyncHandler(async (req, res) => {
@@ -237,43 +243,116 @@ const getMonthlyStats = asyncHandler(async (req, res) => {
 
 });
 
-const getMessagesByCategory = asyncHandler(async (req, res) => {
+// const getMessagesByCategory = asyncHandler(async (req, res) => {
 
-    const { category } = req.params;
+//     const { category } = req.params;
 
-    const validCategories = [
-        "personal",
-        "otp",
-        "bank",
-        "offer",
-        "other",
-    ];
+//     const validCategories = [
+//         "personal",
+//         "otp",
+//         "bank",
+//         "offer",
+//         "other",
+//     ];
 
-    if (!validCategories.includes(category)) {
-        throw new ApiError(400, "Invalid category");
-    }
+//     if (!validCategories.includes(category)) {
+//         throw new ApiError(400, "Invalid category");
+//     }
+
+//     const messages = await Message.find({
+//         category,
+//     })
+//         .populate("sender", "name phone avatar")
+//         .populate("chat")
+//         .sort({ createdAt: -1 });
+
+//     return res.status(200).json({
+//         success: true,
+//         message: `${category} messages fetched successfully`,
+//         data: messages,
+//     });
+
+
+
+// });
+
+const getInbox = asyncHandler(async (req, res) => {
+
+    const { category } = req.query;
+
+    const inbox = await Message.aggregate([
+
+        {
+            $match: {
+                receiver: req.user._id,
+                category
+            }
+        },
+
+        {
+            $sort: {
+                createdAt: -1
+            }
+        },
+
+        {
+            $group: {
+
+                _id: "$sender",
+
+                latestMessage: {
+                    $first: "$content"
+                },
+
+                latestTime: {
+                    $first: "$createdAt"
+                },
+
+                totalMessages: {
+                    $sum: 1
+                }
+            }
+        }
+
+    ]);
+
+    res.json(inbox);
+
+});
+
+
+const getInboxHistory = asyncHandler(async(req,res)=>{
+
+    const { category,sender,page=1 } = req.query;
+
+    const limit = 20;
 
     const messages = await Message.find({
-        category,
+
+        receiver:req.user._id,
+
+        sender,
+
+        category
+
     })
-        .populate("sender", "name phone avatar")
-        .populate("chat")
-        .sort({ createdAt: -1 });
 
-    return res.status(200).json({
-        success: true,
-        message: `${category} messages fetched successfully`,
-        data: messages,
-    });
+    .sort({createdAt:-1})
 
+    .skip((page-1)*limit)
 
+    .limit(limit);
+
+    res.json(messages);
 
 });
 
 export {
     getMessages,
-    getMessagesByCategory,
+    // getMessagesByCategory,
     getMonthlyStats,
     sendMessage,
     getDashboardData,
+    getInbox,
+    getInboxHistory,
 };
