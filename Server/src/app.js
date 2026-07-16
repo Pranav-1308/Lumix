@@ -16,7 +16,7 @@ app.use(
       } else {
         callback(new Error("Not allowed by CORS"));
       }
-        return callback(new Error("Not allowed by CORS"), false);
+        
     },
     credentials: true,
   })
