@@ -16,6 +16,7 @@ function SmartInbox({
     category,
     selectedSender,
     setSelectedSender,
+    messages = [],
 }) {
     const navigate = useNavigate();
     const [senders, setSenders] = useState([]);
@@ -36,6 +37,11 @@ function SmartInbox({
             setLoading(false);
         }
     }
+
+    const activeSenderDetails = senders.find(s => s.senderId === selectedSender);
+    const highlightedMessages = selectedSender
+        ? messages.filter(m => m.category === category)
+        : [];
 
     return (
         <div className="smart-inbox">
@@ -67,6 +73,52 @@ function SmartInbox({
             <div className="smart-content">
                 {loading ? (
                     <div className="loading">Loading Messages...</div>
+                ) : selectedSender ? (
+                    <div className="highlights-container">
+                        <div className="highlights-header-row">
+                            <button
+                                className="back-button"
+                                onClick={() => setSelectedSender(null)}
+                            >
+                                ⬅ Back to Senders
+                            </button>
+                        </div>
+                        <h4 className="highlights-title">
+                            {activeSenderDetails?.senderName || "Sender"}'s Highlights
+                        </h4>
+                        {highlightedMessages.length === 0 ? (
+                            <div className="empty">No highlights found.</div>
+                        ) : (
+                            <div className="highlight-list">
+                                {highlightedMessages.map((msg) => (
+                                    <div
+                                        key={msg._id}
+                                        className={`highlight-item ${category}`}
+                                        onClick={() => {
+                                            const element = document.getElementById(`msg-${msg._id}`);
+                                            if (element) {
+                                                element.scrollIntoView({ behavior: "smooth", block: "center" });
+                                                element.classList.add("flash-highlight");
+                                                setTimeout(() => {
+                                                    element.classList.remove("flash-highlight");
+                                                }, 1500);
+                                            }
+                                        }}
+                                    >
+                                        <p className="highlight-text">{msg.content}</p>
+                                        <span className="highlight-time">
+                                            {new Date(msg.createdAt).toLocaleString([], {
+                                                month: "short",
+                                                day: "numeric",
+                                                hour: "2-digit",
+                                                minute: "2-digit",
+                                            })}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
                 ) : senders.length === 0 ? (
                     <div className="empty">No messages in this category.</div>
                 ) : (

@@ -256,8 +256,9 @@ const FILTERS = [
   { key: "all", label: "All Chats" },
   { key: "personal", label: "Personal" },
   { key: "otp", label: "OTP" },
-  { key: "Offer", label: "Offers" },
-  { key: "Bank", label: "Bank" },
+  { key: "offer", label: "Offers" },
+  { key: "bank", label: "Bank" },
+  { key: "spam", label: "Spam" },
 ];
 
 function Sidebar({ activeView, setActiveView }) {

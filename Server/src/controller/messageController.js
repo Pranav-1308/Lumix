@@ -372,22 +372,19 @@ const getInboxHistory = asyncHandler(async (req, res) => {
     const limit = 20;
 
     const messages = await Message.find({
-
-        receiver: req.user._id,
-
-        sender,
-
-        category
-
+        $or: [
+            { sender: req.user._id, receiver: sender },
+            { sender, receiver: req.user._id }
+        ]
     })
-
         .sort({ createdAt: -1 })
-
         .skip((page - 1) * limit)
-
         .limit(limit);
 
-    res.json(messages);
+    return res.status(200).json({
+        success: true,
+        data: messages
+    });
 
 });
 

@@ -135,3 +135,95 @@
     flex-direction: column;
     gap: 8px;
 }
+
+/* Highlights Container */
+.highlights-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.highlights-header-row {
+    margin-bottom: 12px;
+}
+
+.back-button {
+    background: transparent;
+    border: none;
+    color: #60a5fa;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 6px 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.back-button:hover {
+    color: #3b82f6;
+    transform: translateX(-3px);
+}
+
+.highlights-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin-bottom: 16px;
+    text-transform: capitalize;
+}
+
+.highlight-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow-y: auto;
+}
+
+.highlight-item {
+    padding: 12px;
+    border-radius: 12px;
+    background: #1e1f28;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.highlight-item:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.highlight-text {
+    font-size: 13px;
+    line-height: 1.4;
+    color: #cbd5e1;
+    margin: 0 0 6px 0;
+    word-break: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.highlight-time {
+    display: block;
+    font-size: 10px;
+    color: #64748b;
+    text-align: right;
+}
+
+/* Category Accent Borders for Highlight Items */
+.highlight-item.otp {
+    border-left: 3px solid #8b5cf6;
+}
+.highlight-item.bank {
+    border-left: 3px solid #10b981;
+}
+.highlight-item.offer {
+    border-left: 3px solid #f59e0b;
+}
+.highlight-item.spam {
+    border-left: 3px solid #ef4444;
+}
