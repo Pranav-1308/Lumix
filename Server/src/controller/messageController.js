@@ -45,20 +45,20 @@ const sendMessage = asyncHandler(async (req, res) => {
         );
     }
 
-const category = classifyMessage(content);
+    const category = classifyMessage(content);
 
     // Create message
-   const receiver = chat.participants.find(
-    p => p.toString() !== req.user._id.toString()
-);
+    const receiver = chat.participants.find(
+        p => p.toString() !== req.user._id.toString()
+    );
 
-message = await Message.create({
-    chat: chatId,
-    sender: req.user._id,
-    receiver,
-    content: content.trim(),
-    category,
-});
+    let message = await Message.create({
+        chat: chatId,
+        sender: req.user._id,
+        receiver,
+        content: content.trim(),
+        category,
+    });
 
     // Populate sender
     message = await message.populate(
@@ -152,60 +152,60 @@ const getMessages = asyncHandler(async (req, res) => {
 });
 
 const getDashboardData = asyncHandler(async (req, res) => {
-const dashboard = await Message.aggregate([
-    {
-        $facet: {
+    const dashboard = await Message.aggregate([
+        {
+            $facet: {
 
-            categoryStats: [
-                {
-                    $group: {
-                        _id: "$category",
-                        count: {
-                            $sum: 1,
+                categoryStats: [
+                    {
+                        $group: {
+                            _id: "$category",
+                            count: {
+                                $sum: 1,
+                            },
                         },
                     },
-                },
-            ],
+                ],
 
-            latestMessages: [
-                {
-                    $sort: {
-                        createdAt: -1,
-                    },
-                },
-                {
-                    $group: {
-                        _id: "$category",
-                        latestMessage: {
-                            $first: "$content",
-                        },
-                        createdAt: {
-                            $first: "$createdAt",
+                latestMessages: [
+                    {
+                        $sort: {
+                            createdAt: -1,
                         },
                     },
-                },
-            ],
-
-            recentMessages: [
-                {
-                    $sort: {
-                        createdAt: -1,
+                    {
+                        $group: {
+                            _id: "$category",
+                            latestMessage: {
+                                $first: "$content",
+                            },
+                            createdAt: {
+                                $first: "$createdAt",
+                            },
+                        },
                     },
-                },
-                {
-                    $limit: 5,
-                },
-            ],
+                ],
 
+                recentMessages: [
+                    {
+                        $sort: {
+                            createdAt: -1,
+                        },
+                    },
+                    {
+                        $limit: 5,
+                    },
+                ],
+
+            },
         },
-    },
-]);
+    ]);
 
-return res.status(200).json({
-    success: true,
-    message: "Dashboard data fetched successfully",
-    data: dashboard[0],
-});
+    return res.status(200).json({
+        success: true,
+        message: "Dashboard data fetched successfully",
+        data: dashboard[0],
+    });
 });
 
 
@@ -312,24 +312,68 @@ const getInbox = asyncHandler(async (req, res) => {
                     $sum: 1
                 }
             }
+        },
+
+        {
+            $lookup: {
+                from: "users",
+                localField: "_id",
+                foreignField: "_id",
+                as: "sender"
+            }
+        },
+
+        // CONVERT ARRAY TO OBJECT
+        {
+            $unwind: "$sender"
+        },
+
+        // FINAL SHAPE
+        {
+            $project: {
+                _id: 0,
+
+                senderId: "$sender._id",
+
+                senderName: "$sender.name",
+
+                senderAvatar: "$sender.avatar",
+
+                latestMessage: 1,
+
+                latestTime: 1,
+
+                totalMessages: 1
+            }
+        },
+
+        // SORT SENDERS BY LATEST MESSAGE
+        {
+            $sort: {
+                latestTime: -1
+            }
         }
 
     ]);
 
-    res.json(inbox);
+    return res.status(200).json({
+        success: true,
+        message: `${category} inbox fetched successfully`,
+        data: inbox
+    });
 
 });
 
 
-const getInboxHistory = asyncHandler(async(req,res)=>{
+const getInboxHistory = asyncHandler(async (req, res) => {
 
-    const { category,sender,page=1 } = req.query;
+    const { category, sender, page = 1 } = req.query;
 
     const limit = 20;
 
     const messages = await Message.find({
 
-        receiver:req.user._id,
+        receiver: req.user._id,
 
         sender,
 
@@ -337,11 +381,11 @@ const getInboxHistory = asyncHandler(async(req,res)=>{
 
     })
 
-    .sort({createdAt:-1})
+        .sort({ createdAt: -1 })
 
-    .skip((page-1)*limit)
+        .skip((page - 1) * limit)
 
-    .limit(limit);
+        .limit(limit);
 
     res.json(messages);
 

@@ -64,6 +64,17 @@ const initializeSocket = (io) => {
             io.emit("online-users", Array.from(onlineUsers.keys()));
         });
 
+        socket.on(
+
+            "receive-message",
+
+            () => {
+
+                loadInbox();
+
+            }
+        );
+
     });
 
 };

@@ -6,6 +6,7 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:5173",
   "https://mama-sycamore-delighted.ngrok-free.dev",
+  "http://localhost:5174",
 ];
 
 app.use(
@@ -16,7 +17,7 @@ app.use(
       } else {
         callback(new Error("Not allowed by CORS"));
       }
-        
+
     },
     credentials: true,
   })
