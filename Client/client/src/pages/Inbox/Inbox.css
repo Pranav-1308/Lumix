@@ -1,0 +1,21 @@
+.inbox-page {
+
+    display: flex;
+
+    height: 100vh;
+
+    overflow: hidden;
+
+}
+
+.inbox-page>* {
+
+    border-right: 1px solid #ddd;
+
+}
+
+.inbox-page>*:last-child {
+
+    border-right: none;
+
+}

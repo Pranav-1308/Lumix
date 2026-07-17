@@ -260,7 +260,12 @@ function ChatListPanel({ chats, selectedChatId, onSelectChat, activeView }) {
 
   /* Filter chats by activeView then by search query */
   const filtered = chats
-    .filter((c) => activeView === "all" || c.category === activeView)
+    .filter((c) => {
+      if (activeView === "all" || activeView === "personal") {
+        return c.category === "personal" || !c.category;
+      }
+      return c.category === activeView;
+    })
     .filter((c) => {
       if (!searchQuery.trim()) return true;
       const q = searchQuery.toLowerCase();

@@ -262,6 +262,40 @@ const FILTERS = [
 
 function Sidebar({ activeView, setActiveView }) {
 
+  const inboxes = [
+
+    {
+      name: "Personal",
+      path: "/inbox/personal",
+      icon: "💬"
+    },
+
+    {
+      name: "OTP",
+      path: "/inbox/otp",
+      icon: "🔐"
+    },
+
+    {
+      name: "Bank",
+      path: "/inbox/bank",
+      icon: "🏦"
+    },
+
+    {
+      name: "Offers",
+      path: "/inbox/offer",
+      icon: "🎁"
+    },
+
+    {
+      name: "Spam",
+      path: "/inbox/spam",
+      icon: "🚫"
+    }
+
+  ];
+
   const navigate = useNavigate();
   const { logout } = useUser();
   const [inboxOpen, setInboxOpen] = useState(false);
@@ -271,30 +305,34 @@ function Sidebar({ activeView, setActiveView }) {
   };
 
   const handleFilterSelect = (key) => {
-    setActiveView(key);
     setInboxOpen(false);
+    if (key === "all") {
+      navigate("/home");
+    } else {
+      navigate(`/inbox/${key}`);
+    }
   };
 
   const handleLogout = () => {
 
-  try {
+    try {
 
-    // Disconnect Socket
-    socket.disconnect();
+      // Disconnect Socket
+      socket.disconnect();
 
-  } catch (error) {
+    } catch (error) {
 
-    console.log("Socket Disconnect Error:", error);
+      console.log("Socket Disconnect Error:", error);
 
-  }
+    }
 
-  // Clear Context + LocalStorage
-  logout();
+    // Clear Context + LocalStorage
+    logout();
 
-  // Navigate to Login
-  navigate("/login", { replace: true });
+    // Navigate to Login
+    navigate("/login", { replace: true });
 
-};
+  };
 
   return (
     <aside className="sidebar">
@@ -311,7 +349,7 @@ function Sidebar({ activeView, setActiveView }) {
         <div
           className={`rail-icon ${activeView === "all" && !inboxOpen ? "active" : ""}`}
           title="All Chats"
-          onClick={() => { setActiveView("all"); setInboxOpen(false); }}
+          onClick={() => { handleFilterSelect("all"); }}
         >
           <FaCommentDots />
         </div>

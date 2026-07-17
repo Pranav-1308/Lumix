@@ -1,0 +1,137 @@
+.smart-inbox {
+    flex: 0 0 350px;
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    background: #16171e;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    padding: 24px 20px;
+}
+
+.smart-header {
+    font-size: 24px;
+    font-weight: 700;
+    color: #f8fafc;
+    letter-spacing: -0.5px;
+    margin-bottom: 20px;
+}
+
+/* Category Grid */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 24px;
+}
+
+/* Custom 5th item spam centered across both columns */
+.category-grid > *:nth-child(5) {
+    grid-column: span 2;
+}
+
+.category-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: #1e1f28;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.category-box:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateY(-2px);
+}
+
+.category-icon {
+    font-size: 18px;
+}
+
+.category-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #94a3b8;
+}
+
+.category-box:hover .category-label {
+    color: #f1f5f9;
+}
+
+/* Active Folder States */
+.category-box.active.blue {
+    background: rgba(59, 130, 246, 0.12);
+    border-color: rgba(59, 130, 246, 0.35);
+}
+.category-box.active.blue .category-label {
+    color: #60a5fa;
+}
+
+.category-box.active.violet {
+    background: rgba(139, 92, 246, 0.12);
+    border-color: rgba(139, 92, 246, 0.35);
+}
+.category-box.active.violet .category-label {
+    color: #a78bfa;
+}
+
+.category-box.active.green {
+    background: rgba(16, 185, 129, 0.12);
+    border-color: rgba(16, 185, 129, 0.35);
+}
+.category-box.active.green .category-label {
+    color: #34d399;
+}
+
+.category-box.active.yellow {
+    background: rgba(245, 158, 11, 0.12);
+    border-color: rgba(245, 158, 11, 0.35);
+}
+.category-box.active.yellow .category-label {
+    color: #fbbf24;
+}
+
+.category-box.active.red {
+    background: rgba(239, 68, 68, 0.12);
+    border-color: rgba(239, 68, 68, 0.35);
+}
+.category-box.active.red .category-label {
+    color: #f87171;
+}
+
+/* Senders / Messages Content */
+.smart-content {
+    flex: 1;
+    overflow-y: auto;
+    margin-top: 10px;
+    margin-right: -10px;
+    padding-right: 10px;
+}
+
+/* Scrollbar styling */
+.smart-content::-webkit-scrollbar {
+    width: 6px;
+}
+.smart-content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 3px;
+}
+.smart-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.loading, .empty {
+    text-align: center;
+    padding: 60px 0;
+    color: #64748b;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.inbox-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}

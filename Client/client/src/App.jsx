@@ -5,7 +5,8 @@ import Login from "./pages/Login/Login";
 import OTP from "./pages/OTP/OTP";
 import Home from "./pages/Home/Home";
 import LoginOTP from "./pages/LoginOTP/LoginOTP";
-
+import Inbox from "./pages/Inbox/Inbox";
+import InboxHistory from "./components/InboxHistory/InboxHistory";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
@@ -39,6 +40,15 @@ function App() {
         element={
           <ProtectedRoute>
             <Home />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/inbox/:category"
+        element={
+          <ProtectedRoute>
+            <Inbox />
           </ProtectedRoute>
         }
       />
